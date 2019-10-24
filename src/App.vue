@@ -1,18 +1,18 @@
 <template>
   <div id="app">
     <div>
-      <ChartContainer />
+      <Portrait />
     </div>
   </div>
 </template>
 
 <script>
-import ChartContainer from './components/ChartContainer';
+import Portrait from './views/portrait/index';
 
 export default {
   name: 'app',
   components: {
-    ChartContainer
+    Portrait
   }
 }
 </script>
