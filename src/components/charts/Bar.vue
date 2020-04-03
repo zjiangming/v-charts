@@ -61,13 +61,23 @@ export default {
             chartEmpty: this.empty,
             defaultOption: {
                 legend: {
-                    show: this.legend
+                    show: this.legend,
+                    type: 'scroll',
+                    padding: [0, 20],
+                    pageIconColor: '#6C6CE5', // 正常颜色
+                    pageIconInactiveColor: '#DDDFE2', // 非激活时颜色
+                    pageIcons: { // 分页控制图标
+                        // 水平布局
+                        horizontal: ['M64 64v896h896V64H64z m526.4 672l-256-224 256-224v448z','M64 64v896h896V64H64z m369.6 224l256 224-256 224V288z']
+                    },
+                    pageButtonItemGap: 8, // 翻页按钮和页信息之间的间隔
                 },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
                         type: 'line', // line、shadow
                     },
+                    confine: true,
                     formatter: this.data.tips,
                     // backgroundColor: 'rgba(255, 255, 255, .9)',
                     // borderColor: '#ebeef5',
@@ -127,7 +137,7 @@ export default {
                     row = parseInt(i/this.chartGrid.cols);
                 grid.push({
                     left: this.chartGrid.cols > 1 ? ((100/this.chartGrid.cols * (i%this.chartGrid.cols)) + 5) + '%' : '5%',
-                    top: this.chartGrid.rows > 1 ? ((100/this.chartGrid.rows * row) + (this.legend && row === 0 ? 5 : 0 ) + 5) + '%' : '50',
+                    top: this.chartGrid.rows > 1 ? ((100/this.chartGrid.rows * row) + (this.legend && row === 0 ? 5 : 0 ) + 5) + '%' : '60',
                     width: this.chartGrid.cols > 1 ? (100/this.chartGrid.cols - 10) + '%' : '90%',
                     height: this.chartGrid.rows > 1 ? (100/this.chartGrid.rows - 14) + '%' : '70%',
                     containLabel: true
@@ -174,6 +184,10 @@ export default {
                             fontSize: 14,
                             fontWeight: 'bold'
                         },
+                        axisLabel: {
+                            interval: 0,  // 0 强制显示所有刻度标签，默认'auto'
+                            rotate: labels.length > 5 ? 45 : 0  // 刻度标签旋转的角度
+                        },
                         gridIndex: i,
                         data: labels,
                     })
@@ -196,6 +210,7 @@ export default {
                         name: t,
                         xAxisIndex: i,
                         yAxisIndex: i,
+                        barMaxWidth: 60,
                         data: []
                     };
                     if (typeof(dimensions) === 'string') {

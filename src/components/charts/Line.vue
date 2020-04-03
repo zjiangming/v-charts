@@ -6,12 +6,12 @@
                 暂无数据
             </p>
         </div>
-        <template v-else>
+        <div v-else>
             <div v-if="data.title" class="chart-title">
                 {{ data.title }}
             </div>
             <div :id="key" :style="{ width, height }" />
-        </template>
+        </div>
     </div>
 </template>
 
@@ -62,13 +62,23 @@ export default {
             defaultOption: {
                 title: {},
                 legend: {
-                    show: this.legend
+                    show: this.legend,
+                    type: 'scroll',
+                    padding: [0, 20],
+                    pageIconColor: '#6C6CE5', // 正常颜色
+                    pageIconInactiveColor: '#DDDFE2', // 非激活时颜色
+                    pageIcons: { // 分页控制图标
+                        // 水平布局
+                        horizontal: ['M64 64v896h896V64H64z m526.4 672l-256-224 256-224v448z','M64 64v896h896V64H64z m369.6 224l256 224-256 224V288z']
+                    },
+                    pageButtonItemGap: 8, // 翻页按钮和页信息之间的间隔
                 },
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
                         type: 'line', // line、shadow
                     },
+                    confine: true,
                     formatter: this.data.tips,
                 },
                 grid: [
@@ -122,7 +132,7 @@ export default {
                     row = parseInt(i/this.chartGrid.cols);
                 grid.push({
                     left: this.chartGrid.cols > 1 ? ((100/this.chartGrid.cols * (i%this.chartGrid.cols)) + 5) + '%' : '5%',
-                    top: this.chartGrid.rows > 1 ? ((100/this.chartGrid.rows * row) + (this.legend && row === 0 ? 5 : 0 ) + 5) + '%' : '50',
+                    top: this.chartGrid.rows > 1 ? ((100/this.chartGrid.rows * row) + (this.legend && row === 0 ? 5 : 0 ) + 5) + '%' : '60',
                     width: this.chartGrid.cols > 1 ? (100/this.chartGrid.cols - 10) + '%' : '90%',
                     height: this.chartGrid.rows > 1 ? (100/this.chartGrid.rows - 14) + '%' : '70%',
                     containLabel: true
@@ -157,16 +167,22 @@ export default {
                         }
                     }
                 })
-                legend.data.forEach((t, j) => {
+                legend.data && legend.data.forEach((t, j) => {
                     let d = {
                         type: 'line',
-                        name: t.name,
+                        name: t.name || t,
+                        smooth: item.smooth === false ? false : true,
                         xAxisIndex: i,
                         yAxisIndex: i,
                         data: []
                     };
                     if (typeof(item.value) === 'string') {
-                        d.data = source.map(s => s[item.value]);
+                        if (typeof(dimensions) === 'string') {
+                            let list = source.filter(s => s[dimensions] === d.name);
+                            d.data = list.map(s => s[item.value]);
+                        } else {
+                            d.data = source.map(s => s[item.value]);
+                        }
                     } else {
                         d.data = source.map(s => s[t.key]);
                     }

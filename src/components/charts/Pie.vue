@@ -63,6 +63,18 @@ export default {
                 title: {},
                 legend: {
                     show: this.legend,
+                    type: 'scroll',
+                    orient: 'vertical',
+                    x: 'left',
+                    y: 'middle',
+                    padding: [0, 20],
+                    pageIconColor: '#6C6CE5', // 正常颜色
+                    pageIconInactiveColor: '#DDDFE2', // 非激活时颜色
+                    pageIcons: { // 分页控制图标
+                        // 水平布局
+                        horizontal: ['M64 64v896h896V64H64z m526.4 672l-256-224 256-224v448z','M64 64v896h896V64H64z m369.6 224l256 224-256 224V288z']
+                    },
+                    pageButtonItemGap: 8, // 翻页按钮和页信息之间的间隔
                     formatter: name => {
                         return name.length > 10 ? name.slice(0, 10) + '...' : name;
                     }
